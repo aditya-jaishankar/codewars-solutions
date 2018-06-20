@@ -125,3 +125,120 @@ def alphabet_position(s):
 ````
 
 ## 7. Build tower
+
+Build Tower
+
+Build Tower by the following given argument:
+number of floors (integer and always greater than 0).
+
+Tower block is represented as *
+
+for example, a tower of 3 floors looks like below
+```python
+[
+  '  *  ', 
+  ' *** ', 
+  '*****'
+]
+```
+#### Solution
+```python
+
+def tower_builder(total_floors):
+    def stars(level): # generates just the stars for arbitrary level
+        return ''.join(['*' for i in range(2*level-1)])
+    def padded_stars(level, total_floors): # pads the stars with spaces appropriate for that level
+        side_padding = ''.join([' ' for j in range(total_floors - level)])
+        print(side_padding)
+        lst = [side_padding, stars(level), side_padding]
+        return ''.join(lst)
+    return [padded_stars(level,total_floors) for level in range(1,total_floors+1)]
+    # generates the list of padded stars
+    
+```
+
+## 8. Persistent bugger
+
+Write a function, `persistence`, that takes in a positive parameter `num` and returns its multiplicative persistence, which is the number of times you must multiply the digits in num until you reach a single digit.
+
+```python
+# Not the most elegant solution. Functional programming constructs like reduce might be more elegant.
+def persistence(num):
+    counter = 0
+    while len(str(num)) > 1:
+        stnum = str(num)
+        lstnum = [int(i) for i in stnum]
+        prod = 1
+        for j in range(len(str(num))):
+            prod *= lstnum[j]
+        num = prod
+        counter += 1
+    return counter
+```
+## 9. Valid parentheses
+
+Write a function that takes a string of parentheses, and determines if the order of the parentheses is valid. The function should return true if the string is valid, and false if it's invalid.
+```python
+def valid_parentheses(s):
+    flag = 0
+    for char in s:
+        if char == '(':
+            flag += 1
+        elif char == ')':
+            flag -= 1
+            if flag < 0:
+                return False
+    return flag == 0
+```
+
+## 10. Moving zeroes to the end
+
+Write an algorithm that takes an array and moves all of the zeros to the end, preserving the order of the other elements.
+
+```python
+def move_zeros(items):
+    selected = [item for item in items if item != 0 or item is False]
+    # Subtle point about compaing Boolean's here. If I had used ... or item == False, 
+    # it evaluates False to 0 and hence treats it as a 0 in the rest of the code. 
+    # When comparing Booleans, there are some cases where using 'is' is more valuable. 
+    no_of_zeros = len(items) - len(selected)
+    zeros = [0] * no_of_zeros
+    return selected + zeros
+```
+
+## 11. Array difference
+
+Your goal in this kata is to implement a difference function, which subtracts one list from another and returns the result.
+It should remove all values from list a, which are present in list. Example: `array_diff([1,2,2,2,3],[2]) == [1,3]`.
+
+```python
+
+def array_diff(a, b):
+    return [x for x in a if x not in b] # There are ugly and non-puthonic ways to write this
+```
+
+## 12. Simple pig latin
+
+Move the first letter of each word to the end of it, then add "ay" to the end of the word. Leave punctuation marks untouched.
+
+#### Examples
+```python
+pig_it('Pig latin is cool') # igPay atinlay siay oolcay
+pig_it('Hello world !')     # elloHay orldWay !
+```
+
+#### Solution
+
+Note: A cleverer solution exists in terms of list comprehensions. 
+```python
+import string
+def pig_it(text):
+    words = text.split()
+    last_character = words[-1][-1]
+    if last_character not in string.ascii_letters:
+        del[words[-1]] # Assumes that last character will always be after a space
+    new_words = [''.join([word[1:], word[0], 'ay']) for word in words]
+    if last_character not in string.ascii_letters:
+        new_words.append(last_character)
+    return print(' '.join(new_words))
+```
